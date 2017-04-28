@@ -48,7 +48,7 @@ Untuk menambahkan Firebase ke aplikasi, sebalumnya kita harus mempunyai projek f
     lalu pilih `BUAT PROYEK`, proses selesai.
 2. Jika sudah membuat pastikan tampilannya seperti berikut ![Gambar3](Images/3.png) pada bagian tengan atas terdapat `KancioApp` itu adalah nama projeknya. selanjutnya adalah kita akan memilih untuk, apakah FCM akan di tambahkan ke android, iOS, atau Web. kita bisa sesuai dengan keinginan kita.
 3. Selanjutnya Klik `Tambahkan Firebase ke aplikasi wen Anda` sehingga muncul script seperti berikut ini:
-  ~~~javascript
+~~~javascript
 <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 <script>
   // Initialize Firebase
@@ -62,76 +62,78 @@ Untuk menambahkan Firebase ke aplikasi, sebalumnya kita harus mempunyai projek f
   };
   firebase.initializeApp(config);
 </script>
-  ~~~
-  Script di atas adalah potongan informasi inisialisasi untuk mengkonfigurasi firebase JavaScript SDK agar kita bisa menggunakan Authentication, Storage, dan Realtime Database. Kita kurangi jumlah kode yang di gunakan aplikasi, hanya menyertakan fitur yang kita butuhkan saja berikut komponen yang bisa kita install secara terpisah adalah sbb:
-    * `firebase-app`- Klien inti firebase (wajib).
-    * `firebase-auth` - Otentikasi Firebase(optional)
-    * `firebase-database` - database realtime firebase(optional)
-    * `firebase-storage`- Cloud Storage(optional)
-    * `firebase-messaging` Firebase Cloud Messaging(optional)
+~~~
+Script di atas adalah potongan informasi inisialisasi untuk mengkonfigurasi firebase JavaScript SDK agar kita bisa menggunakan Authentication, Storage, dan Realtime Database. Kita kurangi jumlah kode yang di gunakan aplikasi, hanya menyertakan fitur yang kita butuhkan saja berikut komponen yang bisa kita install secara terpisah adalah sbb:
+  * `firebase-app`- Klien inti firebase (wajib).
+  * `firebase-auth` - Otentikasi Firebase(optional)
+  * `firebase-database` - database realtime firebase(optional)
+  * `firebase-storage`- Cloud Storage(optional)
+  * `firebase-messaging` Firebase Cloud Messaging(optional)
 
 ## Implementasi Firebase Cloud Messaging
 Untuk implementasi FCM, saya menggunakan bahasa pemrograman Go,Html, dan Javascript. Di sini bahasa pemrograman go berfungsi sebagai web server saja, berikut adalah implementasinya.
+
   1. Siapkan struktur file dan direktori seperti gambar berikut ini:
+  ![demo1](/Images/demo2.png)
 
-    ![demo1](/Images/demo2.png)
-
-    pada file `app.js` tambahkan script sebagai berikut untuk melakukan inisialisasi.
+  pada file `app.js` tambahkan script sebagai berikut untuk melakukan inisialisasi.
   ~~~JavaScript
-//app.js
-var config = {
-  apiKey: "AIzaSyAcnxGrGpf2HjlyzVBSNonznbuWR6cZ_B4",
-  authDomain: "kancioapp.firebaseapp.com",
-  databaseURL: "https://kancioapp.firebaseio.com",
-  projectId: "kancioapp",
-  storageBucket: "kancioapp.appspot.com",
-  messagingSenderId: "376337810996"
-};
-firebase.initializeApp(config);
+  //app.js
+  var config = {
+    apiKey: "AIzaSyAcnxGrGpf2HjlyzVBSNonznbuWR6cZ_B4",
+    authDomain: "kancioapp.firebaseapp.com",
+    databaseURL: "https://kancioapp.firebaseio.com",
+    projectId: "kancioapp",
+    storageBucket: "kancioapp.appspot.com",
+    messagingSenderId: "376337810996"
+  };
+  firebase.initializeApp(config);
   ~~~
-  2. Selanjutnya pada file `index.html` buatkan sintaks sebagai berikut:
-    ~~~html
-<html>
-<head>
-    <meta charset=utf-8 />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Cloud Messaging Demo</title>
-    <!-- fungsinya untuk mengaktifkan fungsi firebase -->
-    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+  Selanjutnya pada file `index.html` buatkan sintaks sebagai berikut:
+  ~~~html
+  <html>
+  <head>
+      <meta charset=utf-8 />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Firebase Cloud Messaging Demo</title>
+      <!-- fungsinya untuk mengaktifkan fungsi firebase -->
+      <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 
-    <!-- kedua baris di bawah ini untuk memanggil file style.css dan manifest.json -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="/manifest.json">
-  </head>
+      <!-- kedua baris di bawah ini untuk memanggil file style.css dan manifest.json -->
+      <link rel="stylesheet" href="style.css">
+      <link rel="manifest" href="/manifest.json">
+    </head>
 
-  <body>
-    <h1>Hello,, Ini contoh Implementasi Firebase Cloud Messaging</h1>
-    <!-- fungsinya untuk memanggil fil app.js -->
-    <script src="app.js"></script>
-  </body>
-</html>
+    <body>
+      <h1>Hello,, Ini contoh Implementasi Firebase Cloud Messaging</h1>
+      <!-- fungsinya untuk memanggil fil app.js -->
+      <script src="app.js"></script>
+    </body>
+  </html>
   ~~~
-  3. selanjutnya pada file `manifest.json` tambahkan baris kode seperti berikut ini :
-    ~~~json
-{
-  "//": "Some browsers will use this to enable push notifications.",
-  "//": "It is the same for all projects, this is not your project's sender ID",
-  "gcm_sender_id": "376337810996"
-}
+  selanjutnya pada file `manifest.json` tambahkan baris kode seperti berikut ini :
+  ~~~json
+  {
+    "//": "Some browsers will use this to enable push notifications.",
+    "//": "It is the same for all projects, this is not your project's sender ID",
+    "gcm_sender_id": "376337810996"
+  }
   ~~~
   kode `gcm_sender_id` di dapat pada saat mendaftar projek sebelumnya.
-  4. Pada file `app.js` kita akan menambahkan baris kode seperti pada gambar berikut ini.
-    ~~~JavaScript
-// gunanya untuk mengakses semua pesan
-const messaging = firebase.messaging();
-// Scrip di bawah ini di gunakan untuk menampilkan notifikasi pesan.
-messaging.requestPermission()
-.then(function(){
-  console.log('Memiliki izin');
-})
-.then(function(err){
-  console.log('Terjadi kesalahan');
-})
+
+  Pada file `app.js` kita akan menambahkan baris kode seperti pada gambar berikut ini.
+  ~~~JavaScript
+  // gunanya untuk mengakses semua pesan
+  const messaging = firebase.messaging();
+  // Scrip di bawah ini di gunakan untuk menampilkan notifikasi pesan.
+  messaging.requestPermission()
+  .then(function(){
+    console.log('Memiliki izin');
+  })
+  .then(function(err){
+    console.log('Terjadi kesalahan');
+  })
   ~~~
+
   jika sudah menambahkan kode script di atas, jalankan web server di go, menggunakan perintah `go run main.go`, dan pastikan hasilnya seperti gambar berikut ini ![demo3](Images/demo3.png) setelah itu cek browser [ip:8090], dan hasil akhirnya seperti berikut ini: ![demo4](Images/demo4.png)
   tanda-tanda berhasil ketikan muncul notifikasi seperti pada gambar pojok kiri atas.
