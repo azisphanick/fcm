@@ -39,9 +39,12 @@ Mengirim pesan ke JavaScript client menggunakan HTTP dan XMOO app server protoco
 Untuk menambahkan Firebase ke aplikasi, sebalumnya kita harus mempunyai projek firebase dan cuplikan yang akan di tambahkan ke HTML aplikasi. berikut adalah langkah langkanya :
 1. Buat proyek firebase di `firebase console`. berikut caranya :
   - Buka url [disini](https://console.firebase.google.com/)
-  - Pilih `tambah proyek` seperti pada gambar di bwah ini ![Gambar2](Images/1.png)
-  - Berikan nama projek dan wilayah seperti berikut: ![Gambar3](Images/2.png) lalu pilih `BUAT PROYEK`, proses selesai.
-2. Jika sudah membuat pastikan tampilannya seperti berikut ![Gambar3](Images/3.png) pada pojok kanan atas terdapat `KancioApp` itu adalah nama projeknya. selanjutnya adalah kita akan memilih untuk, apakah FCM akan di tambahkan ke android, iOS, atau Web. kita bisa sesuai dengan keinginan kita.
+  - Pilih `tambah proyek` seperti pada gambar di bwah ini
+  ![Gambar2](Images/1.png)
+  - Berikan nama projek dan wilayah seperti berikut:
+  ![Gambar3](Images/2.png)
+  lalu pilih `BUAT PROYEK`, proses selesai.
+2. Jika sudah membuat pastikan tampilannya seperti berikut ![Gambar3](Images/3.png) pada bagian tengan atas terdapat `KancioApp` itu adalah nama projeknya. selanjutnya adalah kita akan memilih untuk, apakah FCM akan di tambahkan ke android, iOS, atau Web. kita bisa sesuai dengan keinginan kita.
 3. Selanjutnya Klik `Tambahkan Firebase ke aplikasi wen Anda` sehingga muncul script seperti berikut ini:
 ~~~javascript
 <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
@@ -67,8 +70,10 @@ Script di atas adalah potongan informasi inisialisasi untuk mengkonfigurasi fire
 
 ## Implementasi Firebase Cloud Messaging
 Untuk implementasi FCM, saya menggunakan bahasa pemrograman Go,Html, dan Javascript. Di sini bahasa pemrograman go berfungsi sebagai web server saja, berikut adalah implementasinya.
-1. Siapkan struktur file dan direktori seperti gambar berikut ini ![demo1](/Images/demo2.png)
-pada file `app.js` tambahkan script sebagai berikut untuk melakukan inisialisasi.
+1. Siapkan struktur file dan direktori seperti gambar berikut ini:
+![demo1](/Images/demo2.png)
+
+  pada file `app.js` tambahkan script sebagai berikut untuk melakukan inisialisasi.
 ~~~JavaScript
 //app.js
 var config = {
@@ -82,7 +87,7 @@ var config = {
 firebase.initializeApp(config);
 ~~~
 2. Selanjutnya pada file `index.html` buatkan sintaks sebagai berikut:
-~~~html
+  ~~~html
 <html>
 <head>
     <meta charset=utf-8 />
@@ -104,7 +109,7 @@ firebase.initializeApp(config);
 </html>
 ~~~
 3. selanjutnya pada file `manifest.json` tambahkan baris kode seperti berikut ini :
-~~~json
+  ~~~json
 {
   "//": "Some browsers will use this to enable push notifications.",
   "//": "It is the same for all projects, this is not your project's sender ID",
@@ -113,7 +118,7 @@ firebase.initializeApp(config);
 ~~~
 kode `gcm_sender_id` di dapat pada saat mendaftar projek sebelumnya.
 4. Pada file `app.js` kita akan menambahkan baris kode seperti pada gambar berikut ini.
-~~~JavaScript
+  ~~~JavaScript
 // gunanya untuk mengakses semua pesan
 const messaging = firebase.messaging();
 // Scrip di bawah ini di gunakan untuk menampilkan notifikasi pesan.
@@ -125,4 +130,5 @@ messaging.requestPermission()
   console.log('Terjadi kesalahan');
 })
 ~~~
-jika sudah menambahkan kode script di atas, jalankan web server di go, dan jalankan perintah `go run main.go`, dan pastikan hasilnya seperti gambar berikut ini ![demo3](Images/demo3.png) setelah itu cek browser [ip:8090], dan hasil akhirnya seperti berikut ini: ![demo4](Images/demo4.png)tanda-tanda berhasil ketikan muncul notifikasi seperti pada gambar pojok kiri atas.
+jika sudah menambahkan kode script di atas, jalankan web server di go, menggunakan perintah `go run main.go`, dan pastikan hasilnya seperti gambar berikut ini ![demo3](Images/demo3.png) setelah itu cek browser [ip:8090], dan hasil akhirnya seperti berikut ini: ![demo4](Images/demo4.png)
+  tanda-tanda berhasil ketikan muncul notifikasi seperti pada gambar pojok kiri atas.
