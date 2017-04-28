@@ -1,5 +1,5 @@
 # Firebase Cloud Messaging | Firebase
-Firebase Cloud Messaging (FCM) adalah sebuah platform yang memungkinkan kita untuk mengirimkan pesan dan notofikasi secara gratis.
+Firebase Cloud Messaging (FCM) adalah sebuah platform yang memungkinkan kita untuk mengirimkan pesan dan notifikasi secara gratis.
 
 FCM adalah versi terbaru GCM di bawah merk Firebase. Versi baru mewarisi infrastruktur inti GCM, dengan SDK baru untuk membuat pengembangan Cloud Messanging lebih mudah.
 
@@ -38,15 +38,17 @@ Mengirim pesan ke JavaScript client menggunakan HTTP dan XMOO app server protoco
 
 Untuk menambahkan Firebase ke aplikasi, sebalumnya kita harus mempunyai projek firebase dan cuplikan yang akan di tambahkan ke HTML aplikasi. berikut adalah langkah langkanya :
 1. Buat proyek firebase di `firebase console`. berikut caranya :
-  - Buka url [disini](https://console.firebase.google.com/)
-  - Pilih `tambah proyek` seperti pada gambar di bwah ini
-  ![Gambar2](Images/1.png)
-  - Berikan nama projek dan wilayah seperti berikut:
-  ![Gambar3](Images/2.png)
-  lalu pilih `BUAT PROYEK`, proses selesai.
+    - Buka url [disini](https://console.firebase.google.com/)
+    - Pilih `tambah proyek` seperti pada gambar di bawah ini
+
+      ![Gambar2](Images/1.png)
+    - Berikan nama projek dan wilayah seperti berikut:
+
+      ![Gambar3](Images/2.png)
+    lalu pilih `BUAT PROYEK`, proses selesai.
 2. Jika sudah membuat pastikan tampilannya seperti berikut ![Gambar3](Images/3.png) pada bagian tengan atas terdapat `KancioApp` itu adalah nama projeknya. selanjutnya adalah kita akan memilih untuk, apakah FCM akan di tambahkan ke android, iOS, atau Web. kita bisa sesuai dengan keinginan kita.
 3. Selanjutnya Klik `Tambahkan Firebase ke aplikasi wen Anda` sehingga muncul script seperti berikut ini:
-~~~javascript
+  ~~~javascript
 <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 <script>
   // Initialize Firebase
@@ -60,21 +62,22 @@ Untuk menambahkan Firebase ke aplikasi, sebalumnya kita harus mempunyai projek f
   };
   firebase.initializeApp(config);
 </script>
-~~~
-Script di atas adalah potongan informasi inisialisasi untuk mengkonfigurasi firebase JavaScript SDK agar kita bisa menggunakan Authentication, Storage, dan Realtime Database. Kita kurangi jumlah kode yang di gunakan aplikasi, hanya menyertakan fitur yang kita butuhkan saja berikut komponen yang bisa kita install secara terpisah adalah sbb:
-  * `firebase-app`- Klien inti firebase (wajib).
-  * `firebase-auth` - Otentikasi Firebase(optional)
-  * `firebase-database` - database realtime firebase(optional)
-  * `firebase-storage`- Cloud Storage(optional)
-  * `firebase-messaging` Firebase Cloud Messaging(optional)
+  ~~~
+  Script di atas adalah potongan informasi inisialisasi untuk mengkonfigurasi firebase JavaScript SDK agar kita bisa menggunakan Authentication, Storage, dan Realtime Database. Kita kurangi jumlah kode yang di gunakan aplikasi, hanya menyertakan fitur yang kita butuhkan saja berikut komponen yang bisa kita install secara terpisah adalah sbb:
+    * `firebase-app`- Klien inti firebase (wajib).
+    * `firebase-auth` - Otentikasi Firebase(optional)
+    * `firebase-database` - database realtime firebase(optional)
+    * `firebase-storage`- Cloud Storage(optional)
+    * `firebase-messaging` Firebase Cloud Messaging(optional)
 
 ## Implementasi Firebase Cloud Messaging
 Untuk implementasi FCM, saya menggunakan bahasa pemrograman Go,Html, dan Javascript. Di sini bahasa pemrograman go berfungsi sebagai web server saja, berikut adalah implementasinya.
-1. Siapkan struktur file dan direktori seperti gambar berikut ini:
-![demo1](/Images/demo2.png)
+  1. Siapkan struktur file dan direktori seperti gambar berikut ini:
 
-  pada file `app.js` tambahkan script sebagai berikut untuk melakukan inisialisasi.
-~~~JavaScript
+    ![demo1](/Images/demo2.png)
+
+    pada file `app.js` tambahkan script sebagai berikut untuk melakukan inisialisasi.
+  ~~~JavaScript
 //app.js
 var config = {
   apiKey: "AIzaSyAcnxGrGpf2HjlyzVBSNonznbuWR6cZ_B4",
@@ -85,9 +88,9 @@ var config = {
   messagingSenderId: "376337810996"
 };
 firebase.initializeApp(config);
-~~~
-2. Selanjutnya pada file `index.html` buatkan sintaks sebagai berikut:
-  ~~~html
+  ~~~
+  2. Selanjutnya pada file `index.html` buatkan sintaks sebagai berikut:
+    ~~~html
 <html>
 <head>
     <meta charset=utf-8 />
@@ -107,18 +110,18 @@ firebase.initializeApp(config);
     <script src="app.js"></script>
   </body>
 </html>
-~~~
-3. selanjutnya pada file `manifest.json` tambahkan baris kode seperti berikut ini :
-  ~~~json
+  ~~~
+  3. selanjutnya pada file `manifest.json` tambahkan baris kode seperti berikut ini :
+    ~~~json
 {
   "//": "Some browsers will use this to enable push notifications.",
   "//": "It is the same for all projects, this is not your project's sender ID",
   "gcm_sender_id": "376337810996"
 }
-~~~
-kode `gcm_sender_id` di dapat pada saat mendaftar projek sebelumnya.
-4. Pada file `app.js` kita akan menambahkan baris kode seperti pada gambar berikut ini.
-  ~~~JavaScript
+  ~~~
+  kode `gcm_sender_id` di dapat pada saat mendaftar projek sebelumnya.
+  4. Pada file `app.js` kita akan menambahkan baris kode seperti pada gambar berikut ini.
+    ~~~JavaScript
 // gunanya untuk mengakses semua pesan
 const messaging = firebase.messaging();
 // Scrip di bawah ini di gunakan untuk menampilkan notifikasi pesan.
@@ -129,6 +132,6 @@ messaging.requestPermission()
 .then(function(err){
   console.log('Terjadi kesalahan');
 })
-~~~
-jika sudah menambahkan kode script di atas, jalankan web server di go, menggunakan perintah `go run main.go`, dan pastikan hasilnya seperti gambar berikut ini ![demo3](Images/demo3.png) setelah itu cek browser [ip:8090], dan hasil akhirnya seperti berikut ini: ![demo4](Images/demo4.png)
+  ~~~
+  jika sudah menambahkan kode script di atas, jalankan web server di go, menggunakan perintah `go run main.go`, dan pastikan hasilnya seperti gambar berikut ini ![demo3](Images/demo3.png) setelah itu cek browser [ip:8090], dan hasil akhirnya seperti berikut ini: ![demo4](Images/demo4.png)
   tanda-tanda berhasil ketikan muncul notifikasi seperti pada gambar pojok kiri atas.
