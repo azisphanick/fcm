@@ -73,7 +73,8 @@ Script di atas adalah potongan informasi inisialisasi untuk mengkonfigurasi fire
 ## Implementasi Firebase Cloud Messaging
 Untuk implementasi FCM, saya menggunakan bahasa pemrograman Go,Html, dan Javascript. Di sini bahasa pemrograman go berfungsi sebagai web server saja, berikut adalah implementasinya.
 
-  1. Siapkan struktur file dan direktori seperti gambar berikut ini:
+  Siapkan struktur file dan direktori seperti gambar berikut ini:
+
   ![demo1](/Images/demo2.png)
 
   pada file `app.js` tambahkan script sebagai berikut untuk melakukan inisialisasi.
