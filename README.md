@@ -73,6 +73,7 @@ Script di atas adalah potongan informasi inisialisasi untuk mengkonfigurasi fire
 ## Implementasi Firebase Cloud Messaging
 Untuk implementasi FCM, saya menggunakan bahasa pemrograman Go,Html, dan Javascript. Di sini bahasa pemrograman go berfungsi sebagai web server saja, berikut adalah implementasinya.
 
+### Membuat layanan notifikasi.
   Siapkan struktur file dan direktori seperti gambar berikut ini:
 
   ![demo1](/Images/demo2.png)
@@ -115,26 +116,85 @@ Untuk implementasi FCM, saya menggunakan bahasa pemrograman Go,Html, dan Javascr
   selanjutnya pada file `manifest.json` tambahkan baris kode seperti berikut ini :
   ~~~json
   {
-    "//": "Some browsers will use this to enable push notifications.",
-    "//": "It is the same for all projects, this is not your project's sender ID",
-    "gcm_sender_id": "376337810996"
+    "name": "Kancio App",
+    "short_name": "kancioapp",
+    "gcm_sender_id": "103953800507"
   }
   ~~~
-  kode `gcm_sender_id` di dapat pada saat mendaftar projek sebelumnya.
+  kode `gcm_sender_id` tidak bisa di ubah.
 
   Pada file `app.js` kita akan menambahkan baris kode seperti pada gambar berikut ini.
   ~~~JavaScript
   // gunanya untuk mengakses semua pesan
   const messaging = firebase.messaging();
-  // Scrip di bawah ini di gunakan untuk menampilkan notifikasi pesan.
-  messaging.requestPermission()
+  // Scrip di bawah ini di gunakan untuk menampilkan notifikasi pesan, sebalumnya kita di kasih pilihan terlebih dahulu apakah di izinkan atau tidak.
   .then(function(){
     console.log('Memiliki izin');
   })
-  .then(function(err){
+  .catch(function(err){
     console.log('Terjadi kesalahan');
   })
   ~~~
 
   jika sudah menambahkan kode script di atas, jalankan web server di go, menggunakan perintah `go run main.go`, dan pastikan hasilnya seperti gambar berikut ini ![demo3](Images/demo3.png) setelah itu cek browser [ip:8090], dan hasil akhirnya seperti berikut ini: ![demo4](Images/demo4.png)
   tanda-tanda berhasil ketikan muncul notifikasi seperti pada gambar pojok kiri atas.
+### Mendapatkan token dari firebase cloud messaging(FCM)
+Pada direktori `public` kita membuat file `firebase-messaging-sw.js` yang di gunakan untuk service worker, sekaligus berfungsi untuk mengaktifkan fungsi `gcm_sender_id` pada file `manifest.json`, pastikan hasilnya seperti pada gambar berikut ini:![file5](Images/demo5.png)
+
+selanjutnya pada file `app.js` tambahkan baris kode berikut untuk mendapatkan token FCM,
+pastikan sintaksnya seperti berikut ini ![demo6](Images/demo6.png)
+
+sintaks yang saya tambah terdapat pada sintaks yang saya blok.
+
+selanjutnya kita akan menguji ke browser, seperti bisa kita jalankan dulu webservernya seperti pada cara sebelumnya, dah hasilnya seperti pada gabar berikut ini:
+![demo7](Images/demo7.png)
+pada bagian console terdapat token yang telah di kirim memalui `fcm.googleapis.com` seperti terlihat pada gambar berikut ini
+![demo8](Images/demo8.png)
+
+### Menampilkan pesan notifikasi | HTTP request
+ada beberapa tambahan baris kode yang kita tambahkan pada file `firebase-messaging-sw.js`, dan file `app.js` untuk menapilkan notifikasi pesan. langsung saja pada file `firebase-messaging-sw.js` tambahkan baris kode berikut:
+~~~JavaScript
+importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js');
+
+var config = {
+  apiKey: "AIzaSyAcnxGrGpf2HjlyzVBSNonznbuWR6cZ_B4",
+  authDomain: "kancioapp.firebaseapp.com",
+  databaseURL: "https://kancioapp.firebaseio.com",
+  projectId: "kancioapp",
+  storageBucket: "kancioapp.appspot.com",
+  messagingSenderId: "376337810996"
+};
+firebase.initializeApp(config);
+
+const messaging = firebase.messaging();
+messaging.setBackgroundMessageHandler(function(payload){
+  const title = 'Hello'
+  const options = {
+    body: payload.data.status
+  };
+  return self.registration.showNotification(title, options);
+});
+~~~
+  `importScripts` biasanya berfungsi untuk menginport package yang kita butuhkan, pada kasus ini kita akan mengimport file `firebase-app` dan `firebase-messaging` pada link `https://gstatic.com/firebasejs`.
+  pada var `config` berfungsi untuk melakukan inisialisasi projek. `const messaging` berfungsi untuk mendeklarasikan variabel messaging dengan value `firebase.messaging()` ini berfungsi untuk menapilkan pesan. dan baris kode berikutnya di gunakan untuk membuat Handle yang di gunakan untuk menampilkan pesan notifika pada app kita, datanya berupa file format json.
+
+pada file  `app.js` tambahkan baris kode berikut ini
+~~~JavaScript
+messaging.onMessage(function(payload){
+  console.log('onMessage.', payload);
+});
+~~~
+### testing
+* buka terminal anda dan jalankan web servernya.
+* buka browser anda dan masukkan ip:port pada bagian link.
+* pada terminal jalankan perintan barikut ini:
+~~~bash
+curl --header "Authorization: key=AIzaSyCjE0E0ywq4ZuL2d85JPbmuOThHNwWzxYY" --header "Content-Type: application/json" -d '{"to": "cmrW29iaVuk:APA91bHlnrlxHsJnDzf2tYRt-WSd_1G4PIAyvCKNfQimjwjNg8HBHZZs9r-nIISLsK8invo_JEso-iJ57PI0jC7QVfU9Fi10e7xafoaVBWBSVGZgUE-q8LO5nSh4Mr-EOym3r5IyJfDj", "data":{"status": "Wow ini berhasil."}}' https://fcm.googleapis.com/fcm/send
+~~~
+* Pastikan hasilya seperti berikut ini:
+  ![demo9](Images/demo9.png)
+  notofikasi terlihat pada tab `console` pada bagian `onMessage`
+* Jika berada pada tab lain hasilnya seperti berikut ini:
+  ![demo10](Images/demo10.png)
+notifikasi berapa pada pojok kanan atas.

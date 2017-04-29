@@ -1,0 +1,7 @@
+curl --header "Authorization: key=AIzaSyCjE0E0ywq4ZuL2d85JPbmuOThHNwWzxYY" --header "Content-Type: application/json" -d '{"to": "em6cYdDfKik:APA91bE1jbiDm7P5mWuGAoA5KwXyDy5MdWXQpsMeJg9GHnKsNQSLELpdnEzFR2CFekT_w4ipy2ZB_Rm3b4l9uSfgZia-31m6DNb4k-GjfwTOjjp2pIA86hDjR85iSlbl-O6Iob0v0-uT", "data":{"status": "Wow ini berhasil."}}' https://fcm.googleapis.com/fcm/send
+
+
+
+cmrW29iaVuk:APA91bHlnrlxHsJnDzf2tYRt-WSd_1G4PIAyvCKNfQimjwjNg8HBHZZs9r-nIISLsK8invo_JEso-iJ57PI0jC7QVfU9Fi10e7xafoaVBWBSVGZgUE-q8LO5nSh4Mr-EOym3r5IyJfDj
+
+em6cYdDfKik:APA91bE1jbiDm7P5mWuGAoA5KwXyDy5MdWXQpsMeJg9GHnKsNQSLELpdnEzFR2CFekT_w4ipy2ZB_Rm3b4l9uSfgZia-31m6DNb4k-GjfwTOjjp2pIA86hDjR85iSlbl-O6Iob0v0-uT

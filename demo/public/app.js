@@ -13,7 +13,15 @@ const messaging = firebase.messaging();
 messaging.requestPermission()
 .then(function(){
   console.log('Memiliki izin');
+  return messaging.getToken();
 })
-.then(function(err){
-  console.log('Terjadi kesalahan');
+.then(function(token){
+  console.log(token);
 })
+.catch(function(err){
+  console.log('Terjadi kesalahan', err);
+})
+
+messaging.onMessage(function(payload){
+  console.log('onMessage.', payload);
+});
